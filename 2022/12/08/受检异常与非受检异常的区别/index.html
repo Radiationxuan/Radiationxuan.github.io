@@ -13,11 +13,11 @@
 
     <title>
         
-          Archives - Jiaxuan的博客 | Jiaxuan&#39;s Blog
+          受检异常与非受检异常的区别 - Jiaxuan的博客 | Jiaxuan&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="https://radiationxuan.github.io/archives/">
+    <link rel="canonical" href="https://radiationxuan.github.io/2022/12/08/受检异常与非受检异常的区别/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,124 +147,187 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/tag-bg.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://radiationxuan.github.io/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Archives</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">Hey, this is Archives.</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>受检异常与非受检异常的区别</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jiaxuan on
+                        2022-12-08
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <!-- 归档列表 -->
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-            
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
-             <!-- 归档列表 -->
+                <h1 id="受检异常与非受检异常的区别"><a href="#受检异常与非受检异常的区别" class="headerlink" title="受检异常与非受检异常的区别"></a>受检异常与非受检异常的区别</h1><p><code>java</code> 中的异常和错误都继承自 <code>java.long.Throwable</code><br>这类有两个直接的子类<code>Error</code>和<code>Exception</code></p>
+<p>这次主要记录Exception相关信息，在处理异常时，都会接触到受检异常<code>checked exception</code>和非受检异常<code>uncheked Exception</code></p>
+<p>非受检异常指的是<code>java.lang.RuntimeException</code>和<code>java.lang.Error</code></p>
+<p>类及其子类，所有其他的异常类都称为受检异常。两种类型的异常在作用上并没有差别，唯一的差别就在于使用受检异常时的合法性要在编译时刻由编译器来检查。正因为如此，受检异常在使用的时候需要比非受检异常更多的代码来避免编译错误。</p>
+<h4 id="RuntimeException"><a href="#RuntimeException" class="headerlink" title="RuntimeException"></a><code>RuntimeException</code></h4><p><code>RuntimeException</code>在默认情况下会得到自动处理。所以通常用不着捕获<code>RuntimeException</code>，但在自己的封装里，也许仍然要选择抛出一部分<code>RuntimeException</code>。<br><code>RuntimeException</code>是那些可能在 Java 虚拟机正常运行期间抛出的异常的超类。可能在执行方法期间抛出但未被捕获的<code>RuntimeException</code>的任何子类都无需在<code>throws</code>子句中进行声明。（<code>java api</code>）</p>
+<p>​    以下是<code>uncheckedExcepiton</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Java.lang.ArithmeticException</span><br><span class="line">　　Java.lang.ArrayStoreExcetpion</span><br><span class="line">　　Java.lang.ClassCastException</span><br><span class="line">　　Java.lang.EnumConstantNotPresentException</span><br><span class="line">　　Java.lang.IllegalArgumentException</span><br><span class="line">　　Java.lang.IllegalThreadStateException</span><br><span class="line">　　Java.lang.NumberFormatException</span><br><span class="line">　　Java.lang.IllegalMonitorStateException</span><br><span class="line">　　Java.lang.IllegalStateException</span><br><span class="line">　　Java.lang.IndexOutOfBoundsException</span><br><span class="line">　　Java.lang.ArrayIndexOutOfBoundsException</span><br><span class="line">　　Java.lang.StringIndexOutOfBoundsException</span><br><span class="line">　　Java.lang.NegativeArraySizeException’</span><br><span class="line">　　Java.lang.NullPointerException</span><br><span class="line">　　Java.lang.SecurityException</span><br><span class="line">　　Java.lang.TypeNotPresentException</span><br><span class="line">　　Java.lang.UnsupprotedOperationException</span><br></pre></td></tr></table></figure>
+<h4 id="CheckedException"><a href="#CheckedException" class="headerlink" title="CheckedException"></a><code>CheckedException</code></h4><p>除了<code>runtimeException</code>以外的异常，都属于<code>checkedException</code>，它们都在<code>java.lang</code>库内部定义。Java编译器要求程序必须捕获或声明抛出这种异常。<br>一个方法必须通过<code>throws</code>语句在方法的声明部分说明它可能抛出但并未捕获的所有<code>checkedException</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Java.lang.ClassNotFoundException</span><br><span class="line">　　Java.lang.CloneNotSupportedException</span><br><span class="line">　　Java.lang.IllegalAccessException</span><br><span class="line">　　Java.lang.InterruptedException</span><br><span class="line">　　Java.lang.NoSuchFieldException</span><br><span class="line">　　Java.lang.NoSuchMetodException</span><br></pre></td></tr></table></figure>
+<p> 一直以来，关于在程序中到底是该使用受检异常还是非受检<br>异常，开发者之间一直存在着争议，毕竟两类异常都各有优缺点。受检异常的特点在于它强制要求开发人员在代码中进行显式的声明和捕获，否则就会产生编译错误。这种限制从好的方面来说，可以防止开发人员意外地忽略某些出错的情况，因为编译器不允许出现未被处理的受检异常；从不好的方面来说，受检异常对程序中的设计提出了更高的要求。不恰当地使用受检异常，会使代码中充斥着大量没有实际作用、只是为了通过编译而添加的代码。而非受检异常的特点是，如果不捕获异常，不会产生编译错误，异常会在运行时刻才被抛出。<br>非受检异常的好处是可以去掉一些不需要的异常处理代码，而不好之处是开发人员可能忽略某些应该处理的异常。一个典型的例子是把字符串转换成数字时会发生<code>java.lang.NumberFormatException</code>异常，忽略该异常可能导致一个错误的输入就造成整个程序退出。<br>　　目前的主流意见是，最好优先使用非受检异常。</p>
 
 
+                <hr>
 
-            
-            <div class="one-tag-list">
-                <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-                    <span class="tag-text">2022</span>
-                </span>
-                <ul>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <li >
-                    12-08
-                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2022/12/08/受检异常与非受检异常的区别/" style="color: #0085a1">
-                        <span>
-                            受检异常与非受检异常的区别
-                        </span>
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </li>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <li >
-                    12-01
-                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2022/12/01/Scala入门/" style="color: #0085a1">
-                        <span>
-                            Scala入门(变量，数据类型，分支结构)
-                        </span>
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </li>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <li >
-                    12-01
-                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2022/12/01/Hexo-git/" style="color: #0085a1">
-                        <span>
-                            Hexo+git
-                        </span>
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </li>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <li >
-                    12-01
-                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2022/12/01/IDEA创建Scala的maven项目/" style="color: #0085a1">
-                        <span>
-                            IDEA创建Scala的maven项目
-                        </span>
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </li>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <li >
-                    11-15
-                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                    <a href="/2022/11/15/初识Kafka/" style="color: #0085a1">
-                        <span>
-                            初识Kafka
-                        </span>
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </li>
                 
 
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2022/12/01/Scala入门/" data-toggle="tooltip" data-placement="top" title="Scala入门(变量，数据类型，分支结构)">Next Post &rarr;</a>
+                        </li>
+                    
                 </ul>
-            </div>
-            
 
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://blog.kaijun.rocks" target="_blank">Jiaxuan&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="#" target="_blank">Foo</a></li>
+                    
+                        <li><a href="#" target="_blank">Bar</a></li>
+                    
+                        <li><a href="#" target="_blank">Example Friends</a></li>
+                    
+                        <li><a href="#" target="_blank">It helps SEO</a></li>
+                    
+                </ul>
+                
+            </div>
 
         </div>
     </div>
-</div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-huxblog";
+    var disqus_identifier = "https://radiationxuan.github.io/2022/12/08/受检异常与非受检异常的区别/";
+    var disqus_url = "https://radiationxuan.github.io/2022/12/08/受检异常与非受检异常的区别/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
