@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别 - Jiaxuan的博客 | Jiaxuan&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://radiationxuan.github.io/2022/12/09/python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别 /">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Jiaxuan&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">My resume</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://radiationxuan.github.io/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jiaxuan on
+                        2022-12-09
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="python-类里面静态方法-staticmethod类方法-classmethod和实例方法self的使用与区别"><a href="#python-类里面静态方法-staticmethod类方法-classmethod和实例方法self的使用与区别" class="headerlink" title="python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别"></a>python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别</h1><h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>首先弄清楚2个概念，类(A)和类的实例对象（A()）, 如下代码</p>
+<ul>
+<li>count 是A的类属性</li>
+<li>name和age是 A类的实例对象A()属性</li>
+<li>start 是实例方法，默认带self参数</li>
+<li>stop 是静态方法，可以不带默认参数</li>
+<li>open 是类方法，默认带cls参数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.name = <span class="string">"yoyo"</span></span><br><span class="line">        self.age = <span class="number">18</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""实例方法"""</span></span><br><span class="line">        print(<span class="string">"start-11111"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""静态方法"""</span></span><br><span class="line">        print(<span class="string">"stop-22222"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">open</span><span class="params">(cls)</span>:</span></span><br><span class="line">        print(<span class="string">"open-3333333"</span>)</span><br></pre></td></tr></table></figure>
+<p>A类有属性和方法，抽象的来讲，方法也可以看成类的属性（方法属性）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(A.__dict__)  <span class="comment"># A类属性</span></span><br><span class="line">a = A()    <span class="comment"># a是A类的实例对象</span></span><br><span class="line">print(a.__dict__)   <span class="comment"># A类的实例对象属性</span></span><br></pre></td></tr></table></figure>
+<p>运行结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'__module__'</span>: <span class="string">'__main__'</span>, <span class="string">'count'</span>: <span class="number">0</span>, <span class="string">'__init__'</span>: &lt;function A.__init__ at <span class="number">0x000001F84781AAE8</span>&gt;, <span class="string">'start'</span>: &lt;function A.start at <span class="number">0x000001F84781AB70</span>&gt;, <span class="string">'stop'</span>: &lt;staticmethod object at <span class="number">0x000001F84783A2B0</span>&gt;, <span class="string">'open'</span>: &lt;classmethod object at <span class="number">0x000001F84783A2E8</span>&gt;, <span class="string">'__dict__'</span>: &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'A'</span> objects&gt;, <span class="string">'__weakref__'</span>: &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'A'</span> objects&gt;, <span class="string">'__doc__'</span>: <span class="literal">None</span>&#125;</span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'yoyo'</span>, <span class="string">'age'</span>: <span class="number">18</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>从运行结果可以看出，A的类属性有count,还有定义的一些方法（<strong>init</strong>构造方法，还有实例方法，静态方法，类方法）<br>A()实例对象只有<strong>init</strong>构造方法里面的name和age属性（count是类属性，并不是类的实例对象属性）</p>
+<p>如果我们直接A.name 和 A.age就会报错</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(A.name)</span><br><span class="line">print(A.age)</span><br></pre></td></tr></table></figure>
+<p>报错</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"D:/demo/a.py"</span>, line <span class="number">27</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    print(A.name)</span><br><span class="line">AttributeError: type object <span class="string">'A'</span> has no attribute <span class="string">'name'</span></span><br></pre></td></tr></table></figure>
+<p>因为name和age属性在<strong>init</strong>构造方法里面，只有当A类实例化的时候，才会执行<strong>init</strong>构造方法，这时候才会有name和age属性了</p>
+<h3 id="继承时-dict-属性"><a href="#继承时-dict-属性" class="headerlink" title="继承时__dict__属性"></a>继承时__dict__属性</h3><p>当B类继承A类的时候，A类和B类都有自己的类属性 count,也各自有自己的__init__构造方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.name = <span class="string">"yoyo"</span></span><br><span class="line">        self.age = <span class="number">18</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""实例方法"""</span></span><br><span class="line">        print(<span class="string">"start-11111"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""静态方法"""</span></span><br><span class="line">        print(<span class="string">"stop-22222"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">open</span><span class="params">(cls)</span>:</span></span><br><span class="line">        print(<span class="string">"open-3333333"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span></span><br><span class="line">    count = <span class="number">22</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__()</span><br><span class="line">        self.name = <span class="string">"hello"</span></span><br><span class="line">        self.age = <span class="number">22</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">new</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"new--44444"</span>)</span><br><span class="line"></span><br><span class="line">print(A.__dict__)</span><br><span class="line">print(B.__dict__)</span><br><span class="line">a = A()</span><br><span class="line">b = B()</span><br><span class="line">print(a.__dict__)</span><br><span class="line">print(b.__dict__)</span><br></pre></td></tr></table></figure>
+<p>运行结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'__module__'</span>: <span class="string">'__main__'</span>, <span class="string">'count'</span>: <span class="number">0</span>, <span class="string">'__init__'</span>: &lt;function A.__init__ at <span class="number">0x000001FD03F8AAE8</span>&gt;, <span class="string">'start'</span>: &lt;function A.start at <span class="number">0x000001FD03F8AB70</span>&gt;, <span class="string">'stop'</span>: &lt;staticmethod object at <span class="number">0x000001FD03FAA470</span>&gt;, <span class="string">'open'</span>: &lt;classmethod object at <span class="number">0x000001FD03FAA4A8</span>&gt;, <span class="string">'__dict__'</span>: &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'A'</span> objects&gt;, <span class="string">'__weakref__'</span>: &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'A'</span> objects&gt;, <span class="string">'__doc__'</span>: <span class="literal">None</span>&#125;</span><br><span class="line">&#123;<span class="string">'__module__'</span>: <span class="string">'__main__'</span>, <span class="string">'count'</span>: <span class="number">22</span>, <span class="string">'__init__'</span>: &lt;function B.__init__ at <span class="number">0x000001FD03F8AD08</span>&gt;, <span class="string">'new'</span>: &lt;function B.new at <span class="number">0x000001FD03F8AD90</span>&gt;, <span class="string">'__doc__'</span>: <span class="literal">None</span>&#125;</span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'yoyo'</span>, <span class="string">'age'</span>: <span class="number">18</span>&#125;</span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'hello'</span>, <span class="string">'age'</span>: <span class="number">22</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>从运行结果可以看出</p>
+<ul>
+<li>A类和B类的类属性count是不一样的，</li>
+<li>虽然B类继承了A类，方法属性也不一样，可以清楚的区分出哪些是A类的方法属性，哪些是B类的方法属性</li>
+</ul>
+<blockquote>
+<p>python 类里面常用的方法有3个：静态方法（@staticmethod），类方法（@classmethod）和实例方法(self)</p>
+</blockquote>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>方法和函数是有区别的，这两个很容易混淆，函数定义是def关键字定义（外层没有class）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="string">"hello"</span></span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 函数调用</span></span><br><span class="line">res = fun()</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+<p>函数调用使用函数名称后面加括号就能调用了</p>
+<h3 id="实例方法-self"><a href="#实例方法-self" class="headerlink" title="实例方法(self)"></a>实例方法(self)</h3><p>类里面的方法定义也是用def 关键字，注意在类里面叫方法了，不叫函数，定义的方法默认在括号里面加一个self参数。<br>self 是类本身的实例对象，所以在看到def 定义的方法括号后面有self参数的叫实例方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">(self)</span>:</span></span><br><span class="line">        b = <span class="string">"world"</span></span><br><span class="line">        <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line"><span class="comment"># A类不能直接调用fun</span></span><br><span class="line"><span class="comment"># print(A.fun())</span></span><br><span class="line">a = A()</span><br><span class="line">print(a.fun())</span><br></pre></td></tr></table></figure>
+<p>A类的属性和A()实例对象属性是不一样的。<br>fun()里面带了self参数，那么它是实例方法，也就是A()实例对象的方法了，所以必须先实例化A()才能调用此方法。</p>
+<h3 id="静态方法-staticmethod"><a href="#静态方法-staticmethod" class="headerlink" title="静态方法(@staticmethod)"></a>静态方法(@staticmethod)</h3><p>我们可以在函数里面写一个类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">()</span>:</span></span><br><span class="line">    a = <span class="string">"hello"</span></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">(self)</span>:</span></span><br><span class="line">            b = <span class="string">"world"</span></span><br><span class="line">            <span class="keyword">return</span> b</span><br><span class="line">    <span class="keyword">return</span> A</span><br></pre></td></tr></table></figure>
+<p>在类里面是不是也可以写一个函数呢？于是就有了静态方法(@staticmethod),静态方法的出现就是为了在类里面可以写一个函数，当普通的函数去调用。<br>定义静态方法需使用@staticmethod装饰器，并且括号后面不需要self参数了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">(self)</span>:</span></span><br><span class="line">        b = <span class="string">"world"</span></span><br><span class="line">        <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">"start-----"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不用实例化也能调用</span></span><br><span class="line">A.start()</span><br><span class="line"><span class="comment"># 实例化也能调用</span></span><br><span class="line">a = A()</span><br><span class="line">a.start()</span><br></pre></td></tr></table></figure>
+<p>静态方法不需要实例化可以直接调用，实例化后也能调用，可以理解成函数。</p>
+<h3 id="类方法-classmethod"><a href="#类方法-classmethod" class="headerlink" title="类方法(@classmethod)"></a>类方法(@classmethod)</h3><p>类里面有2个概念，属性和方法。<br>前面讲到A类和A()实例对象的属性是不一样的，比如</p>
+<ul>
+<li>A类只要count属性</li>
+<li>A()实例对象的属性是<code>__init__</code>里面的age和name，并且包含A类属性count</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.age = <span class="number">18</span></span><br><span class="line">        self.name = <span class="string">"yoyo"</span></span><br><span class="line"><span class="comment"># A只有count属性</span></span><br><span class="line">print(A.count)</span><br><span class="line"></span><br><span class="line"><span class="comment"># A() 实例化对象</span></span><br><span class="line">a = A()</span><br><span class="line">print(a.count)</span><br><span class="line">print(a.name)</span><br><span class="line">print(a.age)</span><br></pre></td></tr></table></figure>
+<p>既然已经知道了A类的属性和A()实例对象属性是不一样的，再回到前面的实例方法概念上，实例方法是A()实例对象的方法。<br>既然A()实例对象有实例方法，那么A类当然也有类方法的概念了，于是可以在方法上加上@classmethod装饰器声明它是类方法，并且括号第一个参数cls是指类本身</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">(self)</span>:</span></span><br><span class="line">        b = <span class="string">"world"</span></span><br><span class="line">        <span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">"start-----"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(cls)</span>:</span></span><br><span class="line">        print(<span class="string">"create--------"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不需要实例化，类名称直接调用类方法</span></span><br><span class="line">A.create()</span><br><span class="line"><span class="comment"># 实例化也能调用类方法</span></span><br><span class="line">a = A()</span><br><span class="line">a.create()</span><br></pre></td></tr></table></figure>
+<h3 id="类方法使用场景"><a href="#类方法使用场景" class="headerlink" title="类方法使用场景"></a>类方法使用场景</h3><p>实例方法和静态方法小伙伴们应该是经常用的，类方法这个概念本身比较难懂，就算看懂了也不知道如何用到具体场景上，在网上搜到一个案例讲解的挺好的。<br>看下面的定义的一个时间类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataTest</span><span class="params">(object)</span>:</span></span><br><span class="line">    day = <span class="number">0</span></span><br><span class="line">    month = <span class="number">0</span></span><br><span class="line">    year = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, year=<span class="number">0</span>, month=<span class="number">0</span>, day=<span class="number">0</span>)</span>:</span></span><br><span class="line">        self.day = day</span><br><span class="line">        self.month = month</span><br><span class="line">        self.year = year</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">out_date</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"year :"</span>, self.year)</span><br><span class="line">        print(<span class="string">"month :"</span>, self.month)</span><br><span class="line">        print(<span class="string">"day :"</span>, self.day)</span><br><span class="line"></span><br><span class="line">t = DataTest(<span class="number">2021</span>, <span class="number">8</span>, <span class="number">18</span>)</span><br><span class="line">t.out_date()</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">year : <span class="number">2021</span></span><br><span class="line">month : <span class="number">8</span></span><br><span class="line">day : <span class="number">18</span></span><br></pre></td></tr></table></figure>
+<p>如果用户输入的是 “2016-8-1” 这样的字符格式，那么就需要调用Date_test 类前做一下处理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">string_date = <span class="string">'2018-8-18'</span></span><br><span class="line">year, month, day = map(int, string_date.split(<span class="string">'-'</span>))</span><br><span class="line">s = DataTest(year, month, day)</span><br><span class="line">print(s.out_date())</span><br></pre></td></tr></table></figure>
+<p>先把‘2018-8-18’ 分解成 year，month，day三个变量，然后转成int，再调用DataTest(year, month, day) 也很符合期望。<br>那我可不可以把这个字符串处理的函数放到 DateTest 类当中呢？<br>那么@classmethod 就开始出场了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataTest</span><span class="params">(object)</span>:</span></span><br><span class="line">    day = <span class="number">0</span></span><br><span class="line">    month = <span class="number">0</span></span><br><span class="line">    year = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, year=<span class="number">0</span>, month=<span class="number">0</span>, day=<span class="number">0</span>)</span>:</span></span><br><span class="line">        self.day = day</span><br><span class="line">        self.month = month</span><br><span class="line">        self.year = year</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">out_date</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"year :"</span>, self.year)</span><br><span class="line">        print(<span class="string">"month :"</span>, self.month)</span><br><span class="line">        print(<span class="string">"day :"</span>, self.day)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_data</span><span class="params">(cls, string_date)</span>:</span></span><br><span class="line">        <span class="string">"""处理'2018-8-18'字符格式"""</span></span><br><span class="line">        year, month, day = map(int, string_date.split(<span class="string">'-'</span>))</span><br><span class="line">        <span class="keyword">return</span> cls(year, month, day)</span><br></pre></td></tr></table></figure>
+<p>定义一个get_data类方法，处理完字符串后返回这个类的实例对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r = DataTest.get_data(<span class="string">'2018-8-18'</span>)</span><br><span class="line">r.out_date()</span><br></pre></td></tr></table></figure>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2022/12/08/Scala(函数与递归)/" data-toggle="tooltip" data-placement="top" title="Scala(函数与递归)">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">huangxuan Blog</a></li>
+                    
+                        <li><a href="#" target="_blank">Foo</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-radiation_xuan&#39;s blog";
+    var disqus_identifier = "https://radiationxuan.github.io/2022/12/09/python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别 /";
+    var disqus_url = "https://radiationxuan.github.io/2022/12/09/python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别 /";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/radiationxuan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Jiaxuan&#39;s Blog 2022 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://radiationxuan.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'huangxuan.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://radiationxuan.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
