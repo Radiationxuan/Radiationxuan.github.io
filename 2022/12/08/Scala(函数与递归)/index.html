@@ -90,6 +90,13 @@
 
                         
                         <li>
+                            <a href="/about/">My resume</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/archives/">Archives</a>
                         </li>
                         
@@ -98,13 +105,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/about/">My resume</a>
                         </li>
                         
                     
@@ -189,7 +189,45 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="Scala-函数与递归"><a href="#Scala-函数与递归" class="headerlink" title="Scala(函数与递归)"></a>Scala(函数与递归)</h1>
+                <h1 id="Scala-函数与递归"><a href="#Scala-函数与递归" class="headerlink" title="Scala(函数与递归)"></a>Scala(函数与递归)</h1><h2 id="函数的基本定义方式"><a href="#函数的基本定义方式" class="headerlink" title="函数的基本定义方式"></a>函数的基本定义方式</h2><p>在Scala中，函数的基本声明方式有两种：一种是显式标注返回值类型的写法，或者是交由编译器推到类型的缺省写法</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo1</span></span>(p:<span class="type">T</span>):<span class="type">R</span>=&#123;<span class="comment">/*body*/</span>&#125;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo2</span></span>(p:<span class="type">T</span>)=&#123;<span class="comment">/*body*/</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>如果函数体的结构很简单，比如只有一行，那么花括号<code>{}</code>就不是必须的。同时，如果函数体的最后一个表达式能充当返回值，那么<code>return</code>关键字也可以省略掉，比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span></span>(a:<span class="type">Int</span>,b:<span class="type">Int</span>) = a + b</span><br></pre></td></tr></table></figure>
+<p>当返回值类型由编译器推导时，它将遵循以下策略：</p>
+<p>1.如果函数体最终没有返回有效值，则认为返回值为<code>Unit</code>类型</p>
+<p>2.如果函数体最终返回的值类型无法具体判断，编译器优先选择可推断出的最上界类型，如<code>Any</code></p>
+<p>参数列表内的所有·类型被视作不可变的值<code>val</code>,这意味着：</p>
+<p>1.对于数值型数据，无法进行重新赋值</p>
+<p>2.对于引用型数据，无法重新改变引用</p>
+<p>注意，Scala的不可变值和Java的<code>final</code>关键字等价。等于引用型数据，如果它内部属性是不可变的，那么在函数内仍然可以对其属性重新赋值。</p>
+<p>函数内部还可以定义<strong>局部函数</strong>。如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span>=&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span></span>() = print(<span class="string">"Hello"</span>)</span><br><span class="line">    inner()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>局部函数只能在其定义域内部使用，比如上述代码块的<code>inner</code>函数只能在<code>main</code>函数内部调用</p>
+<h3 id="默认函数"><a href="#默认函数" class="headerlink" title="默认函数"></a>默认函数</h3><p>参数后面可以通过<code>=</code>号赋默认值，比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(w:<span class="type">String</span> = <span class="string">"Scala"</span>) = println(<span class="string">s"Hello,<span class="subst">$&#123;w&#125;</span>!"</span>)</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，我们直接使用 <code>w</code> 的默认值，因而无需在调用 <code>foo</code> 函数时再显式地传入参数，程序仍可以打印：<code>Hello,Scala!</code>。但是，当参数列表只有部分参数具备默认值的情况下，可能会引起混淆，比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(w1:<span class="type">String</span>=<span class="string">"Hello,"</span>,w2:<span class="type">String</span>)=println(<span class="string">s"<span class="subst">$&#123;w1&#125;</span>,<span class="subst">$&#123;w2&#125;</span>!"</span>)</span><br><span class="line">foo(<span class="string">"Scala"</span>)</span><br></pre></td></tr></table></figure>
+<p>编译器不确定其入参将覆盖<code>w1</code>的默认值，还是将要赋值给<code>w2</code>。一个解决方案是在调用时做显示的标注，比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo(w2=<span class="string">"Scala"</span>)</span><br></pre></td></tr></table></figure>
+<p>使用这种方法可以显著地提高代码的可读性</p>
+<h3 id="变长参数"><a href="#变长参数" class="headerlink" title="变长参数"></a>变长参数</h3><p>当参数类型后面被标注为<code>*</code>符号时，表示该函数接收的时变长参数，比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(xs:<span class="type">Int</span>*):<span class="type">Unit</span>=<span class="keyword">for</span>&#123;i &lt;- xs&#125; println(i)</span><br><span class="line"></span><br><span class="line">g(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">g(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+<p>变长参数最终会被包装为<code>Scala.collection.mutable.WrappedArray</code>类型，它可以像普通序列那样被遍历。为了避免混淆，变长参数只能在参数列表的最后一个位置，比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(head:<span class="type">Int</span>,left:<span class="type">Int</span>*)=head :: left.toList</span><br></pre></td></tr></table></figure>
+<p>注意，<code>Array[T]</code>类型，或者<code>Seq[T]</code>类型不能直接作为变长参数传入，他们必须使用特殊的标注符<code>_*</code>进行一步转换：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(xs:<span class="type">Int</span>*) =()</span><br><span class="line">g(<span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>) :_*)</span><br><span class="line">g(seq(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>):+*)</span><br></pre></td></tr></table></figure>
+<h2 id="递归函数"><a href="#递归函数" class="headerlink" title="递归函数"></a>递归函数</h2><p>递归函数可以概括出两个基本的要素：</p>
+<p>1.临界条件。递归函数必须有明确的条件表示它何时应该退出</p>
+<p>2.递归公式。可以理解为递归函数在未达到临界条件时的所执行的操作，并再一次调用自身，并传入新参数。一个正确的递归函数将总是向着临界条件收敛</p>
+<p>有一种特殊的递归函数，它不设立临界条件，而仅有递归方程。这种递归函数必定是惰性加载的，常用于生成流数据 ( Stream )，又被称之为 <strong>共递归</strong>。它是函数式编程中的概念之一</p>
+<h3 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h3><p>斐波那契(Fibonacci) 数列指：1，1，2，3，5，8，… 。从第 3 项开始，它的值等于前两项值的和，即 f(n)=f(n−1)+f(n−2),n&gt;2f(n)=f(n-1)+f(n-2),n&gt;2f(n)=f(n−1)+f(n−2),n&gt;2。</p>
+<p>下面将编写一个 <code>fibonacci</code> 函数以递归形式求第 <code>n</code> 个位置上的值。由于斐波那契对 <code>n &lt;= 2</code> 的情况做了特殊定义，因此可以将它设置为临界条件。当 <code>n &gt; 3</code> 时，则需要根据递归公式执行操作。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// n &gt; 0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) <span class="number">1</span> <span class="keyword">else</span> fibonacci(n - <span class="number">1</span>) + fibonacci(n - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="避免重复计算"><a href="#避免重复计算" class="headerlink" title="避免重复计算"></a>避免重复计算</h3><p>从效率上来看，这段代码的性能并不是很好。观察这段内联的代码：<code>fibonacci(n - 1) + fibonacci(n - 2)</code>。Scala 按照严格的从左到右的顺序进行计算，因此会首先计算 <code>fibonacci(n - 1)</code>的值，再去计算 <code>fibonacci(n - 2)</code> 的值。</p>
+<p>实际上，<code>fibonacci(n - 1)</code> 本身就包含了一部分 <code>fibonacci(n - 2)</code> 的计算。而由于函数在递归的过程中是无记忆性的，因此大量的中间结果被反复计算。对于这类问题，其中一个解决思路是以空间换取时间。比如，使用映射表 <code>Map</code> 增加一层缓存功能，避免对中间结果重复计算。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> cache = mutable.<span class="type">Map</span>[<span class="type">Int</span>, <span class="type">Int</span>]()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) <span class="number">1</span> <span class="keyword">else</span> <span class="keyword">if</span> (cache.contains(n)) cache(n) <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> v = fibonacci(n - <span class="number">2</span>) + fibonacci(n - <span class="number">1</span>)</span><br><span class="line">    cache += (n -&gt; v)</span><br><span class="line">    v</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>递归是 Scala 乃至其它支持函数式编程语言的重要一部分。稍微留意我们平常使用的树，链表等就能发现它们的定义都是递归的。对于递归定义的数据类型，使用递归能够方便地表述各类操作，而无需借助传统的 for-loop 或者是 while-loop 进行迭代。</p>
+
 
                 <hr>
 
@@ -198,7 +236,7 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2022/12/09/python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别 /" data-toggle="tooltip" data-placement="top" title="python_类里面静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别">&larr; Previous Post</a>
+                            <a href="/2022/12/09/python类中静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别 /" data-toggle="tooltip" data-placement="top" title="python类中静态方法@staticmethod类方法@classmethod和实例方法self的使用与区别">&larr; Previous Post</a>
                         </li>
                     
                     
