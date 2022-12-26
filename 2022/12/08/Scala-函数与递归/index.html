@@ -90,6 +90,13 @@
 
                         
                         <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/about/">My resume</a>
                         </li>
                         
@@ -98,13 +105,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -189,7 +189,7 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="Scala-函数与递归"><a href="#Scala-函数与递归" class="headerlink" title="Scala(函数与递归)"></a>Scala(函数与递归)</h1><h2 id="函数的基本定义方式"><a href="#函数的基本定义方式" class="headerlink" title="函数的基本定义方式"></a>函数的基本定义方式</h2><p>在Scala中，函数的基本声明方式有两种：一种是显式标注返回值类型的写法，或者是交由编译器推到类型的缺省写法</p>
+                <h1 id="Scala-函数与递归"><a href="#Scala-函数与递归" class="headerlink" title="Scala_函数与递归"></a>Scala_函数与递归</h1><h2 id="函数的基本定义方式"><a href="#函数的基本定义方式" class="headerlink" title="函数的基本定义方式"></a>函数的基本定义方式</h2><p>在Scala中，函数的基本声明方式有两种：一种是显式标注返回值类型的写法，或者是交由编译器推到类型的缺省写法</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo1</span></span>(p:<span class="type">T</span>):<span class="type">R</span>=&#123;<span class="comment">/*body*/</span>&#125;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo2</span></span>(p:<span class="type">T</span>)=&#123;<span class="comment">/*body*/</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>如果函数体的结构很简单，比如只有一行，那么花括号<code>{}</code>就不是必须的。同时，如果函数体的最后一个表达式能充当返回值，那么<code>return</code>关键字也可以省略掉，比如：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span></span>(a:<span class="type">Int</span>,b:<span class="type">Int</span>) = a + b</span><br></pre></td></tr></table></figure>

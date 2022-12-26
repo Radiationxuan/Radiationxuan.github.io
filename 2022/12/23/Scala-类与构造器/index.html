@@ -90,6 +90,13 @@
 
                         
                         <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/about/">My resume</a>
                         </li>
                         
@@ -98,13 +105,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -189,13 +189,100 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <h2 id="Scala-类与构造器"><a href="#Scala-类与构造器" class="headerlink" title="Scala_类与构造器"></a>Scala_类与构造器</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span></span>&#123;</span><br><span class="line">  <span class="keyword">var</span> name : <span class="type">String</span> = <span class="string">"null"</span></span><br><span class="line">  <span class="keyword">var</span> age : <span class="type">Int</span> = _</span><br><span class="line">  <span class="keyword">var</span> color : <span class="type">String</span> = _</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span> </span>= <span class="string">s"Cat(<span class="subst">$name</span>, <span class="subst">$age</span>, <span class="subst">$color</span>)"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Scala内定义一个类，仍然使用的是<code>class</code>关键字。（我们目前为止都是使用<code>object</code>修饰的，之后会提到<code>class</code>和<code>object</code>的区别）</p>
+<p><strong>一般来说，类内部的属性使用<code>var</code>关键字（因为这可以在外部修改这些变量）</strong>。在Scala中，声明变量是一定要赋值的。但是可使用<code>_</code>  表示为这个属性赋默认值，比如<code>AnyVal</code>类型的成员默认为0，<code>AnyRef</code>类型的成员默认为Null。</p>
+<p>从Scala的层面上来说，<code>Cat</code>内部定义的成员都是<code>public</code>的，尽管没有加任何修饰符修饰。但是如果我们查看编译后的<code>Cat.class</code>文件的话，这些属性实际上是修饰为<code>private</code>，只不过编译器又额外地生成了公开的<code>name</code>(相当于Java的<code>get</code>方法)和<code>name_$eq</code>方法。(相当于Java的<code>set</code>方法)</p>
+<p>这些细节在Scala层面是透明的，因此我们可以不受限制地访问一个Scala类的成员，除非这个成员被显示地标注为了<code>private</code>关键字。</p>
+<p>在Scala中，类成员的访问权限被简化了：<strong>要么就不带任何修饰符来表示公有</strong>，要么就带上<code>private</code>或者<code>protected</code>修饰符表示为私有变量或只允许子类访问，<strong>也就是说，Scala的类成员只有三类权限</strong>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;</span><br><span class="line">  <span class="comment">//公开</span></span><br><span class="line">  <span class="keyword">val</span> age : <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line">  <span class="comment">//允许子类访问</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">val</span> toy : <span class="type">String</span> = <span class="string">"toy"</span></span><br><span class="line">  <span class="comment">//私有成员</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> name : <span class="type">String</span> = <span class="string">"kitty"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="BeanProperty注解"><a href="#BeanProperty注解" class="headerlink" title="@BeanProperty注解"></a>@BeanProperty注解</h2><p>为了适配Java的使用习惯，Scala提供<code>@BeanProperty</code>注解，来提供某个属性对应的<code>set/get</code>方法。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@BeanProperty</span></span><br><span class="line"><span class="keyword">var</span> name : <span class="type">String</span> = _</span><br></pre></td></tr></table></figure>
+<p>等价于：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">setName</span></span>(inName : <span class="type">String</span>): <span class="type">Unit</span> =&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = inName</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getName</span> </span>: <span class="type">String</span> = <span class="keyword">this</span>.name</span><br></pre></td></tr></table></figure>
+<p>注意，如果要使用此注解，此内部成员需要是可变<code>var</code>的。并且不能使用<code>private</code>关键字来修饰。</p>
+<h2 id="scala文件中的一些细节"><a href="#scala文件中的一些细节" class="headerlink" title=".scala文件中的一些细节"></a>.scala文件中的一些细节</h2><p>一个<code>.scala</code>源文件内部可以存在多个公开的类，这一点与<code>java</code>不同。在编译期间，<code>scalac</code>会将一个<code>.scala</code>文件中不同的类编译成分别的<code>.class</code>类文件。</p>
+<p>我们在编译过程中还可以发现一个细节：如果声明的是<code>class</code>，则只会编译出一个<code>.class</code>文件。如果声明的是<code>object</code>，则会同时生成两个<code>.class</code>文件。我们会在后续的<strong>伴生对象</strong>当中详细地叙述它。</p>
+<h2 id="赋值”-”与赋值null"><a href="#赋值”-”与赋值null" class="headerlink" title="赋值”_”与赋值null"></a>赋值”_”与赋值null</h2><blockquote>
+<p>注意，这两种赋值方式都要求变量<strong>显示声明数据类型</strong>。</p>
+</blockquote>
+<p>赋值为”_”表示为当前的变量赋默认值。如果该成员没有显示地声明数据类型，则在程序执行的时候会报错：</p>
+<p><code>unbound placeholder parameter</code>，表示没有绑定参数值类型。</p>
+<p>对于不同的数据类型，<code>_</code>所默认代表的值参见下表。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>对应的值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Byte</code> <code>Short</code> <code>Int</code> <code>Long</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>Float</code> <code>Double</code></td>
+<td>0.0</td>
+</tr>
+<tr>
+<td><code>String</code> 和 <code>AnyRef</code></td>
+<td>Null</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>如果赋值了<code>null</code>代表默认为这个属性指向空引用。如果赋值为null，且又不显示的声明数据类型，则该属性变为<code>Null</code>类型（注意！在Scala中，null单独为一个类型，就和Unit一样）。这个属性除了null之外无法再赋其它值，同样会在使用时带来问题。</p>
+<p>Scala在声明对象变量时，可以根据<code>new</code>对象的类型自动推断，所以一般情况下<code>: Type</code>可以省略。但是如果我们希望定义一个上转型，这个时候则需要显示地写上数据类型。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">CreateOBJ</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">   	<span class="comment">//定义了一个上转型对象。</span></span><br><span class="line">    <span class="keyword">val</span> person : <span class="type">Person</span> = <span class="keyword">new</span> <span class="type">Emp</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;&#125;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Emp</span> <span class="keyword">extends</span> <span class="title">Person</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h2><p>Scala的方法与上一章的函数定义方法是一样的。根据笔者的习惯，在类内部声明的函数(Function)特指为<strong>方法</strong>(Method)。在<code>class</code>修饰的类内部声明的方法为实例方法。</p>
+<ol>
+<li>当Scala开始执行的时候，会在栈区开辟一个main栈，main栈在程序执行完毕后最后销毁。</li>
+<li>当Scala程序执行到一个方法时，总会开辟一个新的栈。</li>
+<li>每个栈都是独立的空间，AnyVal类型的数据类型是独立的，相互不会影响。</li>
+<li>当方法执行完毕之后，该方法开辟的栈会被JVM机回收</li>
+</ol>
+<h2 id="Scala构造方法（构造器）"><a href="#Scala构造方法（构造器）" class="headerlink" title="Scala构造方法（构造器）"></a>Scala构造方法（构造器）</h2><blockquote>
+<p>Scala的构造方法和Java存在着较大的区别。</p>
+</blockquote>
+<p>构造器的作用是对新对象的初始化。</p>
+<p>在Java中，一个类可以定义多个不同的构造方法，简称构造方法重载。如果没有显示声明构造器，则Java默认提供无参构造器。如果显示声明了构造器，则Java将不再提供无参构造器。且Java的构造器内第一行省略了super();</p>
+<p>Scala的构造器包括了<strong>主构造器</strong>和<strong>辅助构造器</strong>。编译器通过不同的参数来区分选择何种构造器。而无论是何种构造器，都是不需要返回值的。</p>
+<h3 id="主构造器"><a href="#主构造器" class="headerlink" title="主构造器"></a>主构造器</h3><p>主构造器直接在<code>class</code>上进行声明，如下面的代码块。类名的后面直接跟进一个参数列表，来为Teacher的内部成员赋值。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Teacher</span>(<span class="params">inAge: <span class="type">Int</span> = 25, inName: <span class="type">String</span> = "<span class="type">Tom</span>"</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> age: <span class="type">Int</span> = inAge</span><br><span class="line">  <span class="keyword">var</span> name: <span class="type">String</span> = inName</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这等价于Java的这种声明方式:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上述构造器的Java写法：</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Teacher</span><span class="params">(<span class="keyword">int</span> inAge,String inName)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.age = inAge;</span><br><span class="line">	<span class="keyword">this</span>.Name = inName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>class</code>内部的代码块实际上就可看作是<strong>一个主构造函数的函数体</strong>。当主程序使用主构造器创建一个类实例时，<strong>会像执行函数一样顺序执行class内部的每一条语句</strong>，而函数体内的声明语句则成为了该类的属性成员和内部方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上述构造器的Java写法：</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Teacher</span><span class="params">(<span class="keyword">int</span> inAge,String inName)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.age = inAge;</span><br><span class="line">	<span class="keyword">this</span>.Name = inName;</span><br><span class="line">    <span class="comment">//我们在Scala的class内的语句相当于都是写入了构造器的函数体内。</span></span><br><span class="line">	System.out.println(<span class="string">"Hire a teacher."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们甚至有更精简的写法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Teacher</span>(<span class="params">var inAge: <span class="type">Int</span> = 25,var inName: <span class="type">String</span> = "<span class="type">Tom</span>"</span>)</span></span><br></pre></td></tr></table></figure>
+<p>看到差别了吗？它直接省略了将”外部参数赋值给内部成员”的步骤，相当于直接将内部成员放到参数列表中进行初始化。（这种省略方式仅限于在主构造器当中使用）</p>
+<p>另外，在单例模式当中，我们为了隐匿某个类的构造方法，在 Java 中的通常做法是将其构造器声明为私有的。那在 Scala 当中如何做到这一点呢？我们只需直接在参数列表的前边加上 <code>private</code> 关键字修饰就可以了。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Teacher</span> <span class="title">private</span> (<span class="params">var inAge: <span class="type">Int</span> = 25,var inName: <span class="type">String</span> = "<span class="type">Tom</span>"</span>)</span></span><br></pre></td></tr></table></figure>
+<p>这样，我们就不能直接去调用 Teacher 类的构造方法去创建实例了。不过令人费解的是，IntelliJ IDEA 并不会报语法错误，而是在编译之后才会提示没有权限访问此类的构造器。</p>
+<h3 id="辅助构造器"><a href="#辅助构造器" class="headerlink" title="辅助构造器"></a>辅助构造器</h3><p>用<code>this</code>关键字为类内部的方法命名，以表示该方法是一个辅助构造器。<strong>注意！辅助构造器内的第一行必须显示或隐式地调用主构造器！</strong>（这种感觉就像是在Java类当中，super构造器必须写在子构造器的第一行一样。）</p>
+<p>这么做的根本原因是：<strong>只有主构造器通过extends关键字建立了与父类的联系</strong>。而子类的辅助构造器无法直接地调用父类的任何构造器，因此在调用辅助构造器之前，一定要先调用主构造器。这像是一个装饰者模式：先调用主构造器构造其父类和主要属性，然后再使用辅助构造器对其它的拓展属性进行补充。</p>
+<p>对于显示地调用主构造器很好理解，那何为间接地调用主构造器呢？那就是某个辅助构造器调用了另一个辅助构造器，而该辅助构造器调用了主构造器。</p>
+<p>我们直接给出以下代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;</span><br><span class="line">  println(<span class="string">"1"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">this</span></span>(int: <span class="type">Int</span>)&#123;</span><br><span class="line">    <span class="comment">//B在调用辅助构造器之前，会先调用B的主构造器</span></span><br><span class="line">    <span class="keyword">this</span></span><br><span class="line">    println(<span class="string">"2"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//A的主构造器调用了B的辅助构造器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">B</span>(<span class="params">5</span>)</span>&#123;</span><br><span class="line">  println(<span class="string">"3"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">this</span></span>(string: <span class="type">String</span>)&#123;</span><br><span class="line">    <span class="comment">//在调用A的辅助构造器之前，会首先调用A的主构造器</span></span><br><span class="line">    <span class="keyword">this</span></span><br><span class="line">    println(<span class="string">"4"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，类A的示例在初始化前先调用父类B的带参数构造器。</p>
+<p>那么这行语句实际上调用了几个构造器呢？</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用了A的辅助构造器构造对象。</span></span><br><span class="line"><span class="keyword">val</span> a : <span class="type">A</span> = <span class="keyword">new</span> <span class="type">A</span>(<span class="string">"a"</span>)</span><br></pre></td></tr></table></figure>
+<p>从结果来看，一共是调用了4个构造器。因为程序会在控制台中打印：<code>1 2 3 4</code>。程序首先调用父类B的主构造器，然后再调用B的辅助构造器。当B构建完成时，再调用A的主构造器，然后调用A的辅助构造器。</p>
+
 
                 <hr>
 
                 
 
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2022/12/23/Discovery-of-human-reverse-thinking-based-on-subway-data/" data-toggle="tooltip" data-placement="top" title="Discovery of human reverse thinking based on subway data">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">
