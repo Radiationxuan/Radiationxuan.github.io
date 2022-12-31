@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          sql_基础 - Jiaxuan的博客 | Jiaxuan&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://radiationxuan.github.io/2022/12/29/sql-基础/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Jiaxuan&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">My resume</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://radiationxuan.github.io/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>sql_基础</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jiaxuan on
+                        2022-12-29
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>SQL 标准定义了多种数据类型，它们在各数据库中都是通用的。</p>
+<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><ol>
+<li>char(n)，<strong>固定</strong> n 个长度的字符串。</li>
+<li>varchar(n)，最长可拓展到 n 个长度的字符串。</li>
+<li>int，整数。</li>
+<li>smallint，小整数。</li>
+<li>numeric(n,m)，由用户指定精度的浮点数。在这 n 位数字中，符号位占用 1 位，而小数点右边有 n 位中的 m 位数字。</li>
+<li>real &amp; double：浮点数和双精度浮点数。</li>
+<li>float(n)，精度至少为 n 位的浮点数。</li>
+</ol>
+<h3 id="SQL-中的日期与时间"><a href="#SQL-中的日期与时间" class="headerlink" title="SQL 中的日期与时间"></a>SQL 中的日期与时间</h3><ol>
+<li>日期 ( date )：记录年，月，日。</li>
+<li>时间 ( time )：记录一天当中的时分秒。</li>
+<li>时间戳 ( timestamp )：同时组合日期和时间。</li>
+</ol>
+<p>在 MySQL 中，有三个函数对应如何获取它们：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- 获取当前的日期</span><br><span class="line">SELECT curdate();</span><br><span class="line">-- 获取当前的时间</span><br><span class="line">SELECT curtime();</span><br><span class="line">-- 获取当前的时间戳</span><br><span class="line">SELECT now();</span><br></pre></td></tr></table></figure>
+<p>除此之外，可以利用 <code>extract(f from d)</code> 函数从代表时间的值 <code>d</code> 中提取出相应的域。其中 <code>f</code> 可能包含了：year, month, day, hour, minute, second，具体取决于 <code>d</code> 是何种时间类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 从日期当中抽取年份</span><br><span class="line">SELECT EXTRACT(year FROM CURDATE())</span><br><span class="line"></span><br><span class="line">-- 从时间当中抽取小时数</span><br><span class="line">SELECT EXTRACT(hour FROM CURTIME())</span><br></pre></td></tr></table></figure>
+<h3 id="存储大型字节-字符数据"><a href="#存储大型字节-字符数据" class="headerlink" title="存储大型字节 / 字符数据"></a>存储大型字节 / 字符数据</h3><p>数据库自身是提供存储大型字符数据 ( 比如一篇文章 )，或是大型二进制数据 ( 比如图片，视频等 ) 的，它们统称为大对象数据类型 ( large-object date type )。这分为 <strong>clob</strong> 和 <strong>blob</strong>。</p>
+<p>下面从 MySQL 数据库的角度来介绍这两种数据类型。</p>
+<p>clob 用于存储大量的文本，它包含了：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最大大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TinyText</td>
+<td>255 字节</td>
+</tr>
+<tr>
+<td>Text</td>
+<td>65535 字节 ( 约 65 K )</td>
+</tr>
+<tr>
+<td>MediumText</td>
+<td>16 777 215 字节 ( 约 16 M )</td>
+</tr>
+<tr>
+<td>LongText</td>
+<td>4 294 967 295 ( 约 4 G )</td>
+</tr>
+</tbody>
+</table>
+<p>blob 用于存储二进制文件，它包含了：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最大大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TinyBlob</td>
+<td>255 字节</td>
+</tr>
+<tr>
+<td>Blob</td>
+<td>65535 字节( 约 65 K )</td>
+</tr>
+<tr>
+<td>MediumBlob</td>
+<td>16 777 215 字节 (约 16 M )</td>
+</tr>
+<tr>
+<td>LongBlob</td>
+<td>4 294 967 295 ( 约 4 G )</td>
+</tr>
+</tbody>
+</table>
+<h2 id="建表和删除"><a href="#建表和删除" class="headerlink" title="建表和删除"></a>建表和删除</h2><p>SQL 建表的一个基本写法是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &lt;`table_name`&gt; (</span><br><span class="line">	&lt;`attr1`&gt; &lt;`type1`&gt; [`约束`],</span><br><span class="line">	&lt;`attr2`&gt; &lt;`tupe2`&gt; [`约束`],</span><br><span class="line">	&lt;`主键约束`&gt;，</span><br><span class="line">	[`外键约束`],</span><br><span class="line">	[`check子句`]</span><br><span class="line">)；</span><br></pre></td></tr></table></figure>
+<p><code>create</code> 子句必须要有一个主码约束。其中，诸如非空约束，唯一约束，和简短的 <code>check</code> 约束 ( 主要是出于观感的角度来考虑) 都可以直接放在属性声明的后面，不同行之间使用 <code>,</code> 相隔。额外的，在 MySQL 中，如果要让 DBMS 自动维护主键的值，可以为主键设置 <code>AUTO_INCREMENT</code> 另其自增，前提是主键是数字类型。这样，我们在后续插入新的元组时，就应当避免人为地存储主键。</p>
+<p>反过来，如果要从数据库当中删除一个关系，使用的则是 <code>drop</code> 命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE &lt;`table_name`&gt;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>另外，使用 <code>alter add</code> 子句可以为已有的关系中添加属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE &lt;`table_name`&gt; add (</span><br><span class="line">	&lt;`attr_name`&gt; &lt;`type`&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h2><p>我们之前已经了解了<strong>主键约束</strong> <code>primary key(&lt;key_name&gt;)</code>，<strong>外键约束</strong> <code>foreign key(&lt;key_name)&gt;) references &lt;table_name&gt;</code>，<strong>非空约束</strong> <code>not null</code>，它们都应用在 DDL SQL 当中。除此之外，SQL 还存在以下约束：</p>
+<h3 id="唯一性约束"><a href="#唯一性约束" class="headerlink" title="唯一性约束"></a>唯一性约束</h3><p>和非空约束类似，在需要唯一约束的属性后面添加 <code>unique</code> 关键字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &lt;`table_name`&gt; (</span><br><span class="line">	&lt;`attr1`&gt; &lt;`type1`&gt; UNIQUE,</span><br><span class="line">	...</span><br><span class="line">    PRIMARY KEY &lt;attrn&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>如果这个属性没有被施加非空约束，那么该列唯一可以重复的值就是 <code>null</code>。</p>
+<h3 id="check-子句"><a href="#check-子句" class="headerlink" title="check 子句"></a>check 子句</h3><p>check 子句提供一个灵活的，可用任意谓词修饰的条件约束。比如：约束性别一栏应该要么是 “female”，要么是 “male”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- gender 是一个属性。</span><br><span class="line">CHECK(gender IN (&apos;Female&apos;,&apos;Male&apos;))</span><br></pre></td></tr></table></figure>
+<p>简单的 check 子句可以直接修饰属性，复杂的 check 子句也可以放到 <code>create table</code> 的后面。值得注意的是，部分数据库厂商可能 <strong>不提供包含子查询的谓词</strong>。</p>
+<h2 id="增删改操作"><a href="#增删改操作" class="headerlink" title="增删改操作"></a>增删改操作</h2><p><strong>删除</strong> ( delete ) 请求的表达方式和查询非常类似。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM r </span><br><span class="line">WHERE p</span><br></pre></td></tr></table></figure>
+<p>其中，<code>r</code> 代表了关系名 ( 表名 )，而 <code>p</code> 代表了条件谓词。如果省略了 <code>where</code> 子句，那么 DBMS 会将这个关系内的所有元组删除。和</p>
+<p><strong>插入</strong> ( insert ) 数据使用 <code>insert into</code>  子句。比如向 <em>instructor</em> 关系中插入一条新的教师信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 简单的写法，这要求给定元组所有属性的值。</span><br><span class="line">INSERT INTO course VALUES(&apos;CS-437&apos;,&apos;DataBase Systems&apos;,&apos;Comp.Sci&apos;,4);</span><br><span class="line">-- 可以声明属性的排列顺序，那么给出的值也应该按这个顺序排列。</span><br><span class="line">-- 在插入元组的部分属性时会用到这种写法。</span><br><span class="line">INSERT INTO course(title,course_id,credits,dept_name) VALUES (&apos;DataBase Systems&apos;,&apos;CS-437&apos;,4,&apos;Comp.Sci&apos;)</span><br></pre></td></tr></table></figure>
+<p><strong>更新</strong> ( update ) 可以改变原有元组的一部分属性的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPDATE `instructor` SET salary = 70000</span><br><span class="line">WHERE name = &apos;Wu&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><p>关系本身就是一个无序的集合。因此，如果需要使查询结果按照一定的次序排列，可以选择使用 <code>order by</code> 子句。比如，将教职工按照工资的降序，名字的升序来排列显示结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `instructor`</span><br><span class="line">ORDER BY salary DESC, name ASC</span><br></pre></td></tr></table></figure>
+<p>其中，<code>desc</code> 表示降序，<code>asc</code> 则表示升序。</p>
+<h2 id="聚集函数"><a href="#聚集函数" class="headerlink" title="聚集函数"></a>聚集函数</h2><p><strong>聚集函数</strong> ( aggregate function ) 是将一个集合压缩为一个值返回的规约函数。SQL 标准规定了 5 个基本规约函数：<code>avg</code>，<code>min</code>，<code>max</code>，<code>sum</code>，<code>count</code>。比如说：查询所有工资大于 50k 的教师人数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT COUNT(*) FROM instructor</span><br><span class="line">WHERE salary &gt; 50000</span><br></pre></td></tr></table></figure>
+<p>下面给出一个稍稍复杂的查询：”查询各个系中工资大于 50k 的人数”，那么就需要先做一个分组聚集 <code>group by</code> 了，此时返回的是每一个分组的聚集函数计算结果的集合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT COUNT(*) FROM instructor</span><br><span class="line">WHERE salary &gt; 50000</span><br><span class="line">GROUP BY dept_name</span><br></pre></td></tr></table></figure>
+<p>没有被 <code>group by</code> 直接选中的属性不应该再被 <code>select</code> 直接投影出来，只可以出现在聚集函数的参数当中。比如在上述的查询中，<code>salary</code> 不可以直接出现在 <code>select</code> 子句中，因为 <code>group by</code> 只根据 <code>dept_name</code> 进行聚集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 错误的示范，这个 salary 没有任何意义。</span><br><span class="line">SELECT COUNT(*),salary FROM instructor</span><br><span class="line">WHERE salary &gt; 50000</span><br><span class="line">GROUP BY dept_name</span><br><span class="line"></span><br><span class="line">-- 但是 salary 可以用于聚合函数中。比如这里求每个系中大于 50k 的教职工的平均薪资。</span><br><span class="line">-- dept_name 可以直接出现在 SELECT 语句中.</span><br><span class="line">SELECT AVG(salary),dept_name FROM instructor</span><br><span class="line">WHERE salary &gt; 50000</span><br><span class="line">GROUP BY dept_name</span><br></pre></td></tr></table></figure>
+<p>一个更复杂的查询：”查询 ‘工资大于 50k 的人数’ 大于 1 个的系”。我们现在的问题是：需要对筛选之后的各个系进行筛选，如果人数小于等于 1，那么这个分组会被直接丢弃。因而需要引入一个新的关键字 —— 那就是 <code>having</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT COUNT(*) AS nums,dept_name FROM instructor</span><br><span class="line">WHERE salary &gt; 50000</span><br><span class="line">GROUP BY dept_name</span><br><span class="line">HAVING nums &gt; 1</span><br></pre></td></tr></table></figure>
+<p>类似地，<code>having</code> 子句也不应该直接出现那些没有被 <code>group by</code> 选中的属性 ( 但是它们仍然可以以聚合函数的参数形式存在 )。另一个需要重要强调的知识点就是将它和 <code>where</code> 关键字区分开：<code>where</code> 条件用于筛选元组，而 <code>having</code> 则用于筛选聚集的分组。</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>子查询分为<strong>返回一个关系</strong>的子查询，或者是<strong>仅返回单个值</strong>的标量子查询。</p>
+<p>对于第一种子查询，它可以出现在任意的 <code>from</code>，<code>in</code>，<code>not in</code> 子句中，前文已经演示过了。下面给出更简单一点的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT `name`</span><br><span class="line">-- mysql 要求跟在 from 子句后的子查询必须要附带一个别称。</span><br><span class="line">FROM (</span><br><span class="line">	SELECT * FROM instructor </span><br><span class="line">	WHERE salary &gt; 50000</span><br><span class="line">) AS t1</span><br></pre></td></tr></table></figure>
+<p>额外的，<code>in</code> 和 <code>not in</code> 还可以用于枚举集合：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM instructor</span><br><span class="line">WHERE dept_name IN (&quot;History&quot;,&quot;Finance&quot;)</span><br></pre></td></tr></table></figure>
+<p>如果确保一个子查询只返回一个值，那么它可以出现在 <code>select</code> ，<code>where</code>，<code>having</code> 等子句中。</p>
+<h3 id="with-子句"><a href="#with-子句" class="headerlink" title="with 子句"></a>with 子句</h3><p>如果一个 from 子句后面的子查询过于冗长，可以利用 <code>with</code> 关键字将它提取到前面进行声明。形式为：<code>WITH &lt;临时表名&gt; AS (子查询)</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 这两段是一个整体。</span><br><span class="line">WITH more_than_50000 AS (</span><br><span class="line">	SELECT * FROM instructor </span><br><span class="line">	WHERE salary &gt; 50000</span><br><span class="line">) </span><br><span class="line">SELECT `name`</span><br><span class="line">FROM more_than_50000</span><br></pre></td></tr></table></figure>
+<p>如果有多个子查询需要被命名，那么仅需要一个 <code>with</code> 关键字，然后用逗号 <code>,</code> 相隔：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">WITH history_instructors AS (</span><br><span class="line">	SELECT * FROM instructor</span><br><span class="line">	WHERE dept_name = &quot;history&quot;</span><br><span class="line">), music_instructors AS (</span><br><span class="line">	SELECT * FROM instructor</span><br><span class="line">	WHERE dept_name = &quot;music&quot;</span><br><span class="line">)</span><br><span class="line">SELECT * FROM history_instructors </span><br><span class="line">UNION </span><br><span class="line">SELECT * FROM music_instructors</span><br></pre></td></tr></table></figure>
+<h3 id="Some-All"><a href="#Some-All" class="headerlink" title="Some / All"></a>Some / All</h3><p>这里介绍两个子句：<code>some</code> 和 <code>all</code>。前者表示 “至少”，后者表示 “所有”。在很久以前，SQL 使用 <code>any</code> 来表示 “至少”。但是 <code>any</code> 在英语中容易引发 “任何一个” 还是 “任何所有” 的歧义，因此后续又新引入了 <code>some</code> 。比如：查询 “至少比一位历史系教职工工资高的老师”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM instructor</span><br><span class="line">WHERE salary &gt; SOME (</span><br><span class="line">	SELECT salary FROM instructor </span><br><span class="line">	WHERE dept_name = &quot;history&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>再比如，查询 “比所有历史系教职工工资都高的老师”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM instructor</span><br><span class="line">WHERE salary &gt; ALL (</span><br><span class="line">	SELECT salary FROM instructor </span><br><span class="line">	WHERE dept_name = &quot;history&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>注意，这里查询结果只能有一列，因为我们仅需要一个值来要和外层的 <code>salary</code> 进行比较。另外，<code>=some</code> 等价于 <code>in</code>，但是 <code>&lt;&gt;some</code> 不等价于 <code>not in</code>；同样的，<code>&lt;&gt;any</code>  等价于 <code>not in</code>，但是 <code>=all</code> 不等价于 <code>in</code>。</p>
+<h3 id="Case-分支"><a href="#Case-分支" class="headerlink" title="Case 分支"></a>Case 分支</h3><p>偶尔，我们需要在查询中根据一个属性的取值来返回不同的结果。在 SQL 中，这个分支语句有两种写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SELECT </span><br><span class="line">ID,(</span><br><span class="line">  -- 类似于 switch </span><br><span class="line">	CASE grade</span><br><span class="line">		WHEN &quot;A+&quot; THEN &quot;great&quot;</span><br><span class="line">		WHEN &quot;A&quot; THEN &quot;good&quot;</span><br><span class="line">		ELSE &quot;ok&quot;</span><br><span class="line">	END</span><br><span class="line">) AS `rank`</span><br><span class="line">FROM takes</span><br></pre></td></tr></table></figure>
+<p>第一种写法是 <code>case</code> 子句后接上一个属性，然后像 <code>switch</code> 子句那样检索它，每一个 <code>when</code> 子句后面只能跟上单个值。另外一种方式是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SELECT </span><br><span class="line">ID,(</span><br><span class="line">  -- 类似于 if </span><br><span class="line">	CASE </span><br><span class="line">		WHEN grade IN (&quot;A+&quot;,&quot;A&quot;) THEN &quot;great&quot;</span><br><span class="line">		WHEN grade IN (&quot;B&quot;,&quot;C&quot;) THEN &quot;good&quot;</span><br><span class="line">		ELSE &quot;ok&quot;</span><br><span class="line">	END</span><br><span class="line">) AS `rank`</span><br><span class="line">FROM takes</span><br></pre></td></tr></table></figure>
+<p>如果 <code>case</code> 后面没有属性，那么 <code>when</code> 后面可以承接表达式。无论哪种写法，都必须以 <code>end</code> 关键字作为结尾。<code>case</code> 分支相当于是一个返回单个值的子查询，因此理论上它可以出现在 <code>select</code>，<code>where</code>，<code>having</code> 等子句中。</p>
+<h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>对于一些常用的子查询，我们可以声明一个视图将它保存起来，而不是在每段查询前声明一大段 <code>with</code>。语法为：</p>
+<p><code>create view &lt;view_name&gt;(&lt;colum1&gt;,&lt;colum2&gt;,...) as (select 子句)</code>。比如，从 <em>instructor</em> 表中创建一个历史系教职工的视图：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW history_instructor(name,salary) AS (</span><br><span class="line">	SELECT `name`,salary FROM `instructor`</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>所有的视图都基于原有的数据库模式，且视图之间也可以相互引用。</p>
+<p>不同的厂商对视图的实现方式有所不同。对于有些厂商而言，视图是 <strong>懒加载</strong> 的：DBMS 只会记录这个视图的查找过程，并且只有在真正调用的时候才会执行这个过程并返回视图的内容。但对于另外的一些厂商实现而言，视图是真实存在的，保存在数据库当中的数据，这种视图被称作 <strong>物化视图</strong> ( materialized view )。但是，物化视图依赖的表发生变更时，物化视图就必须要及时做出更新。</p>
+<p>保持物化视图一直在最新状态的过程称作是物化视图维护 ( materialized view maintenance )。最 “勤快” 的方式是每当检测到引用的表更新时，将视图一同更新。而 “懒惰” 的方法则是设立定时器周期性的重新计算数据。</p>
+<p>如果能提前将经过大量复杂，费时的聚合结果保存为视图，那么可以极大提升下次查询的速度，避免读取大型的底层关系。但问题也在这里：用户是否能接受视图的数据可能是 “滞后” 的。出于思维定势，我们一般认为视图是只读的。能否通过对视图施加插入，更改，删除操作从而影响到底层的关系呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO history_instructor(name,salary) VALUES (&apos;Li&apos;,50000)</span><br></pre></td></tr></table></figure>
+<p>假定我们选择在 <code>history_instructor</code> 视图插入一条记录，显然这条记录最终将插入到 <code>instructor</code> 表内。那么，原来表内需要的 <code>ID</code> 和 <code>dept_name</code> 项怎么办？因此，借助视图来影响底层关系表是一个很复杂的问题。SQL:1999 标准对 “视图何时可以被插入，更改以及删除的时机” 制定了非常严格且复杂的标准。</p>
+<p>默认情况下，数据库不会阻止这类高危行为，比如 MySQL。但是由于缺失了 <code>ID</code> 和 <code>dept_name</code> 信息，这条语句最终仍会执行失败。</p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>当数据库内的数据量足够大时，遍历搜索的方式将变得十分低效。比如说在几十万条数据搜索 “物理系中薪资大于 50000 的老师”。如果我们能够对 <em>instructor</em> 表按照 <code>dept_name</code> 建立一个合适的索引，那么就能将搜索范围从十几万缩减到几千，从而提升查询效率。</p>
+<p>索引是一个冗余结构，对于查询结果的正确性来说，它并不是必须的。创建索引的句式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE INDEX &lt;`index_name`&gt; ON &lt;`table`&gt;(&lt;`attribute`&gt;)</span><br></pre></td></tr></table></figure>
+<p>因此，如果我们想要对 <em>instructor</em> 表的 <code>dept_name</code> 建立索引，SQL 语句是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE INDEX dept_index ON instructor(dept_name)</span><br></pre></td></tr></table></figure>
+<p>对应的，如果要删除一个索引，我们使用以下 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP INDEX &lt;`index_name`&gt;</span><br></pre></td></tr></table></figure>
+<p>索引有两种方式 —— B+ 树索引和哈希索引。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>简单来说，事务由一连串独立的查询 / 语句构成，这些语句 “要么都做，要么都不做”，以此来保证事务的 <strong>一致性</strong>。下面演示了如何在 MySQL 中使用一个简单的事务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BEGIN;</span><br><span class="line">	</span><br><span class="line">	UPDATE bank SET balance = balance - 1000.00 WHERE `name` = &apos;Li Ping&apos;;</span><br><span class="line">	UPDATE bank SET balance = balance + 1000.00 WHERE `name` = &apos;Wang Fang&apos;;</span><br><span class="line"></span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+<p>如果在执行 <code>Begin;</code> … <code>Commit;</code> 块的过程中没有错误，那么我们在事务块结束之后主动提交一次 <code>Commit</code> 表示将该事务做出的改动永久保存到数据库中。反之，如果得到了一些 “预料外的错误”，那么就需要在事务结束后提交一个 <code>ROLLBACK</code> 来让数据库回到 <code>BEGIN;</code> 开始之前的状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BEGIN;</span><br><span class="line">	</span><br><span class="line">	UPDATE bank SET balance = balance - 1000.00 WHERE `name` = &apos;Li Ping&apos;;</span><br><span class="line">	UPDATE bank SET balance = balance + 1000.00 WHERE `name` = &apos;Wang Fang&apos;;</span><br><span class="line">	</span><br><span class="line">-- 以上更改全部会失效，我们称事务回滚了。</span><br><span class="line">ROLLBACK;</span><br></pre></td></tr></table></figure>
+<p>回滚能够撤销的操作有：<code>Delete</code>，<code>Update</code>，<code>Insert</code>，而 <code>Create</code> 和 <code>Drop</code> 这类 DDL 操作无法回滚。额外需要注意的是，数据库本身不会因为事务块执行成功与否而自行判断该事务是 <code>Commit</code> 还是被 <code>Rollback</code>。比如说事务块内有一条语句 <em>a</em>  “不幸” 包含了一个语法错误：这个事务会异常中断，语句 <em>a</em> 之前的执行结果被保留，而之后的查询则不会被执行，这显然破坏了事务的一致性要求。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2022/12/29/高级SQL/" data-toggle="tooltip" data-placement="top" title="高级SQL">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2022/12/26/Scala-包与包对象/" data-toggle="tooltip" data-placement="top" title="Scala_包与包对象">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">huangxuan Blog</a></li>
+                    
+                        <li><a href="#" target="_blank">Foo</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-radiation_xuan&#39;s blog";
+    var disqus_identifier = "https://radiationxuan.github.io/2022/12/29/sql-基础/";
+    var disqus_url = "https://radiationxuan.github.io/2022/12/29/sql-基础/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/radiationxuan">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Jiaxuan&#39;s Blog 2022 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://radiationxuan.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'huangxuan.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://radiationxuan.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

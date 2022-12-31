@@ -189,13 +189,82 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <h1 id="Scala-包与包对象"><a href="#Scala-包与包对象" class="headerlink" title="Scala_包与包对象"></a>Scala_包与包对象</h1><p>在谈及 Scala 包之前，我们不妨回顾 Java 包的三大作用：</p>
+<ol>
+<li>区分相同名字的类</li>
+<li>控制类的访问范围</li>
+<li>有助于代码管理</li>
+</ol>
+<p>Java 中的打包实际上就是创建了不同的文件夹来管理这些文件管理起来。当使用到命名冲突的类时，可以通过<strong>包名.类名</strong>的全限定名称来避免歧义。同时， Java 要求：类的源文件在哪里，它所声明的 package 就在哪里。比如说<code>Obj.java</code>文件在项目路径<code>bin/test</code>中，则该源文件内部声明的 package 必须为 bin/test 。</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>在 Scala 中，源码文件的实际位置可以与 package 中声明的目录不一样（但这并不是规范的做法，我们也很少这样做）。在编译之后，编译器仍然会按照 package 声明的目录生成对应的 <code>.class</code> 文件。</p>
+<p>Scala 的命名规则规定包名<strong>只能包含数字，字母，下划线，圆点</strong>（代表子目录），<strong>尤其注意包名不可以为 Scala 关键字</strong>。通常的命名规范为：<code>com.公司名.项目名.业务模块名</code>。</p>
+<p>Scala 也会自动引入一些我们常用的包，如 <code>Java.lang.*</code> 包等。</p>
+<h2 id="Scala-引入包的几种方式"><a href="#Scala-引入包的几种方式" class="headerlink" title="Scala 引入包的几种方式"></a>Scala 引入包的几种方式</h2><p>我们依旧可以沿袭 Java 的方式来声明一个 Object 实际所处的包位置。比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sclPackage.cn.hlju</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>它所在的包层次为：sclPackge , cn , hlju 。因此我们还可以根据层次结构来拆开声明：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sclPackage</span><br><span class="line"><span class="keyword">package</span> cn</span><br><span class="line"><span class="keyword">package</span> hlju</span><br></pre></td></tr></table></figure>
+<p>Java 严格限制 <code>package</code> 关键字必须出现在源文件的首行。但是 Scala 却没有对此进行限制，甚至说，我们可以在文件的任何一处引入 <code>package</code> 关键字。<strong>这使得我们甚至可以仅仅在一个 Scala 源文件内构造出一个复杂的包结构！</strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sclPackage.cn&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">import</span> sclPackage.cn.hit.<span class="type">Teacher</span></span><br><span class="line">	<span class="keyword">import</span> sclPackage.cn.hlju.<span class="type">Student</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 这个类位于 sclPackage.cn.hit 下。</span></span><br><span class="line">	<span class="keyword">package</span> hit&#123;</span><br><span class="line">		<span class="class"><span class="keyword">class</span> <span class="title">Teacher</span> </span>&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 这个类位于 sclPackage.cn.hlju 下。</span></span><br><span class="line">	<span class="keyword">package</span> hlju&#123;</span><br><span class="line">		<span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 这个类位于 sclPackage.cn 下。</span></span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Obj</span> </span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而在编译时，编译器会构建出一个这样的树状目录：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sclPackage.cn</span><br><span class="line">  ┗ hlju</span><br><span class="line">    ┗ Student.class</span><br><span class="line">  ┗ hit</span><br><span class="line">    ┗ Teacher.class</span><br><span class="line">  ┗ Obj.class</span><br></pre></td></tr></table></figure>
+<h2 id="包权限"><a href="#包权限" class="headerlink" title="包权限"></a>包权限</h2><p>Scala 包讲究作用域原则：子包可以直接向上访问父包的内容。在 Java 中，我们必须要借助 <code>import</code> 关键字引入它。</p>
+<p>💥下面三条很重要：</p>
+<ol>
+<li>当子包和父包都存在一个重名的类时， Scala 则采取<strong>就近原则</strong>。</li>
+<li>如果要在子包内主动调用位于父包的同名类，则需要指定包名。</li>
+<li>父包想要访问子包的内容，需要 <code>import</code> 导入对应的类。</li>
+</ol>
+<p>下面代码来演示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//HjlU包外有一个重名的Student类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">  println(<span class="string">"2"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> hlju &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//hlju 内有一个 Student 类</span></span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    println(<span class="string">"1"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">  <span class="comment">// “main” 方法在这里！↓</span></span><br><span class="line">  <span class="comment">// Scala 采取就近原则，优先调用 hlju 包下的 Student 。</span></span><br><span class="line">  <span class="class"><span class="keyword">object</span> <span class="title">Enter</span></span>&#123;</span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">      <span class="comment">//控制台打印1.</span></span><br><span class="line">      <span class="keyword">val</span> student : <span class="type">Student</span> = <span class="keyword">new</span> <span class="type">Student</span></span><br><span class="line">    &#125;</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="包对象"><a href="#包对象" class="headerlink" title="包对象"></a>包对象</h1><blockquote>
+<p>在Java中，没有类似于C语言的全局变量的概念：一切函数和变量都归属于类下。（因而又称它们是某个类的方法和属性）</p>
+</blockquote>
+<p>为了摆脱Java的这个局限，Scala中引入了<strong>包对象</strong>的概念。它对同一个包下的其它类提供类似于<strong>全局</strong>的方法和属性。</p>
+<h2 id="Scala-包对象的简要特点"><a href="#Scala-包对象的简要特点" class="headerlink" title="Scala 包对象的简要特点"></a>Scala 包对象的简要特点</h2><ul>
+<li>关键字为<code>package object</code>，后接包的名字。</li>
+<li>每一个包都<strong>可以（但最多只能）声明一个</strong>包对象。</li>
+<li>包对象只对当前包下的类可见，或者说不对其子包下的类可见。</li>
+</ul>
+<p>举个例子，在sclPackage包下生成一个包对象，并定义一个<code>packageVar</code>和<code>packageFun</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> <span class="class"><span class="keyword">object</span> <span class="title">sclPackage</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> packageVar : <span class="type">Int</span> = <span class="number">100</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">packageFun</span> </span>= <span class="string">"Hello,Scala!"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之后，在sclPackage下的类可以引用包对象声明的变量或者方法，但是sclPackage下其它子包内的<code>object</code>或者<code>class</code>不能使用这些方法。</p>
+<h2 id="通过反编译来查看包对象的工作机制"><a href="#通过反编译来查看包对象的工作机制" class="headerlink" title="通过反编译来查看包对象的工作机制"></a>通过反编译来查看包对象的工作机制</h2><p>为了大致了解Scala包对象的底层实现，我们打开<code>jd-gui</code>来查看它是如何工作的。打开classes目录可以发现，包对象经编译生成了<code>package.class</code>和<code>package$.class</code>。</p>
+<p>所有包对象在底层生成的文件名都叫<code>package.class</code>，它和包名没有关系。并且， <code>package</code> 是一个关键字，我们无法通过手动的方法来创建名字为 package 的类。</p>
+<p>在源码文件声明包对象时，我们只需要用包名指定名称即可。</p>
+<p><img src="https://cdn.staticaly.com/gh/Radiationxuan/img@main/20221226/底层编译.5gdxfufxbnk0.webp" alt="底层编译"></p>
+<p>如图所示，在 sclPackage 包下的 Obj1，Obj2，Obj3 都可以直接访问并使用包对象当中的内容。这颇有几分声明<strong>“头文件”</strong>的意思：</p>
+<p><img src="https://cdn.staticaly.com/gh/Radiationxuan/img@main/20221227/image.4yoh0x1xd400.webp" alt="image"></p>
+<p>而在底层中，我们在声明的”全局变量”，“全局函数”都保存在本包内的<code>package$</code>类中，它提供公有的访问方法。该包下的其它<code>.class</code>在编译时会自动地引入<code>package$</code>，进而使得该包下的类得以调用其变量和属性。</p>
+<p><img src="https://cdn.staticaly.com/gh/Radiationxuan/img@main/20221227/image.6eswgaghst00.webp" alt="image"></p>
+<h2 id="Scala-引入包"><a href="#Scala-引入包" class="headerlink" title="Scala 引入包"></a>Scala 引入包</h2><p>Scala 引入包同样也是 <code>import</code> 关键字。而与 Java 相比，Scala 引入包有以下细节：</p>
+<ul>
+<li><p>Scala 中， <code>import</code> 关键字可以出现在任何地方。<code>import</code>引入的类只能在对应的作用域下使用。这样的优势就是：仅仅在需要某个组件的时候才引入包，提高了效率（类似于懒加载）。比如下面的示例：在Box 类中导入的 BeanProperty 注解不会影响到 Closet 。因此我们不能在 Closet 类中直接使用此注解。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Box</span></span>&#123;</span><br><span class="line">  <span class="keyword">import</span> scala.beans.<span class="type">BeanProperty</span></span><br><span class="line">  <span class="meta">@BeanProperty</span> <span class="keyword">val</span> scrip : <span class="type">String</span> = <span class="string">"Wow"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Closet</span></span>&#123;</span><br><span class="line">  <span class="comment">//Oops!</span></span><br><span class="line">  <span class="meta">@BeanProperty</span> <span class="keyword">val</span> clothes : <span class="type">String</span> = <span class="string">"dress"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Java中使用通配符”*”来表示引入某个包所有的类，Scala中使用下划线”_”来表示引入某个包内所有的类。比如：引入scala.collection.mutable包下的所有类：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.collection.mutable._</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Scala中可以使用选择器来选择引入包的内容，比如：只引入scala.collection.mutable下的HashMap和HashSet类。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.collection.mutable.&#123;<span class="type">HashMap</span>,<span class="type">HashSet</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当<strong>引入多个包导致有重名类</strong>时，可以在引入时使用<code>{A =&gt; B}</code>的格式对其进行重命名作区分。比如：同时使用到了可变的HashMap和不可变的HashMap，这时对其中一个类进行重命名，避免混乱。<strong>重命名的类只对该文件内有效。</strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.collection.mutable.<span class="type">HashMap</span></span><br><span class="line"><span class="comment">// 将其中一个重名的类“重命名”为 ImmutableHashMap。</span></span><br><span class="line"><span class="keyword">import</span> scala.collection.immutable.&#123;<span class="type">HashMap</span>=&gt;<span class="type">ImmnutableHashMap</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>承接上述的情况，也可以选择将不用的类屏蔽掉。格式为：<code>{A=&gt;_}</code>。”=&gt;”后面的 <code>_</code> 代表<strong>屏蔽，隐去</strong>。但是要注意，单独的 <code>_</code> 代表通配符。</p>
+<p>比如：引入 <code>scala.collection.immutable</code> 包下除了 <code>HashMap</code> 类以外的所有类。</p>
+</li>
+</ul>
+
 
                 <hr>
 
                 
 
                 <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2022/12/29/sql-基础/" data-toggle="tooltip" data-placement="top" title="sql_基础">&larr; Previous Post</a>
+                        </li>
                     
                     
                         <li class="next">
